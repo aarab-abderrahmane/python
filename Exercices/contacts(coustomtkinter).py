@@ -2,6 +2,8 @@ from customtkinter import *
 import customtkinter as ck
 from spinbox_customtkinter import CTkSpinbox  # Assuming this class is defined properly
 
+
+
 # Initialize app
 app = CTk()
 app.geometry("900x500")

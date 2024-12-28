@@ -1,17 +1,23 @@
 # Used Libraries 
 ### rich
 ```python
-pip install rich
+pip install rich==13.9.4
  ```
 ### PIL / Pillow
 
 ```python
-pip install pillow
+pip install pillow==11.0.0
 ```
 ### tkinter bootstrap
 
 ```python
-pip install ttkbootstrap
+pip install ttkbootstrap==1.10.1
+```
+
+### tkinter customtkinter
+
+```python
+pip install customtkinter==5.2.2
 ```
 
 ### sqlite3

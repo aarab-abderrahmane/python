@@ -2,7 +2,6 @@
 # Écrire un programme qui demande une date et indique si elle tombe un jour ouvré (lundi à
 # vendredi) ou le week-end (samedi et dimanche). Utilisez if-else pour afficher "Jour ouvré" ou
 # "Week-end
-
 from datetime import datetime
 
 def verifie_jour_ouvre():
