@@ -13,7 +13,7 @@ class Sign:
         self.app.geometry("800x450")
         self.app.title('Sign In')
         self.app.resizable(False,False)
-        self.app.iconbitmap("C:\\Users\\group2\\Desktop\\python\\projects\\Registration\\icon_app.ico")
+        # self.app.iconbitmap("C:\\Users\\group2\\Desktop\\python\\projects\\Registration\\icon_app.ico")
 
         self.creat_data()
 
@@ -25,7 +25,7 @@ class Sign:
         self.frame_1 = CTkFrame(app, corner_radius=0, fg_color="#e9edc9")
         self.frame_1.grid(row=0, column=0, sticky="nsew")
 
-        self.image = Image.open("C:\\Users\\group2\\Desktop\\python\\projects\\Registration\\photo-multicultural-community-concept-collage.jpg")
+        self.image = Image.open("photo-multicultural-community-concept-collage.jpg")
         # C:\\Users\\group2\\Desktop\\python\\images\\photo-multicultural-community-concept-collage.jpg
 
         self.image = self.image.resize((400, 500)) 
@@ -43,7 +43,7 @@ class Sign:
         self.frame_2 = CTkFrame(app, corner_radius=0, fg_color="white")# #ffedd9
         self.frame_2.grid(row=0, column=1, sticky="nsew")
 
-        self.image_1 = Image.open("C:\\Users\\group2\\Desktop\\python\\projects\\Registration\\icon_.ico")
+        self.image_1 = Image.open("icon_.ico")
         self.image_1 = self.image_1.resize((40, 40))  
         self.icon = CTkImage(self.image_1, size=(40, 40))
 

@@ -46,17 +46,17 @@ class SignUpPage:
         # self.button_back_to_login.place(x=260, y=210)
 
 
-        self.eye_off_icon = Image.open("C:\\Users\\group2\\Desktop\\python\\projects\\Registration\\eye.png") 
-        self.eye_icon = Image.open("C:\\Users\\group2\\Desktop\\python\\projects\\Registration\\view.png")  
+        self.eye_off_icon = Image.open("eye.png") 
+        self.eye_icon = Image.open("view.png")  
         
         self.eye_off_icon = CTkImage(self.eye_off_icon, size=(20, 20))
         self.eye_icon = CTkImage(self.eye_icon, size=(20, 20))
 
-        self.eye_button_1 = CTkButton(self.frame_3, image=self.eye_off_icon, text="", width=10, height=50,bg_color="#f2f2f2", fg_color="#f2f2f2",corner_radius=8,hover_color="#f2f2f2",command= lambda : self.toggle_password_visibility(self.entry_5,self.eye_button_1))
+        self.eye_button_1 = CTkButton(self.frame_3, image=self.eye_off_icon, text="", width=10, height=50,bg_color="#f5ebe0", fg_color="#f5ebe0",corner_radius=8,hover_color="#f5ebe0",command= lambda : self.toggle_password_visibility(self.entry_5,self.eye_button_1))
         self.eye_button_1.place(x=323, y=230)
 
 
-        self.eye_button_2 = CTkButton(self.frame_3, image=self.eye_off_icon, text="", width=10, height=50,bg_color="#f2f2f2", fg_color="#f2f2f2",corner_radius=8,hover_color="#f2f2f2",command= lambda : self.toggle_password_visibility(self.entry_6,self.eye_button_2))
+        self.eye_button_2 = CTkButton(self.frame_3, image=self.eye_off_icon, text="", width=10, height=50,bg_color="#f5ebe0", fg_color="#f5ebe0",corner_radius=8,hover_color="#f5ebe0",command= lambda : self.toggle_password_visibility(self.entry_6,self.eye_button_2))
         self.eye_button_2.place(x=323, y=300)
             
 
@@ -64,7 +64,7 @@ class SignUpPage:
         self.frame_4=CTkFrame(self.app,corner_radius=0,fg_color="white")
         self.frame_4.grid(row=0,column=1,sticky="news")
 
-        self.image = Image.open("C:\\Users\\group2\\Desktop\\python\\projects\\Registration\\image_1.png")
+        self.image = Image.open("image_1.png")
 
         self.image = self.image.resize((300, 300)) #ext
         self.photo = CTkImage(self.image, size=(380, 380))  #inter
