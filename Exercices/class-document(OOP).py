@@ -64,7 +64,86 @@ class Revue(Document):
 
 
 
-try : 
+class CD(Document):
+    def __init__(self,id_,titre,auteur,annee_publication,genre_musical,duree):
+        
+        super().__init__(id_,titre,auteur,annee_publication)
+        self.genre_musical=genre_musical
+        self.duree=duree
+
+    def afficher_details(self):
+        return f'{super().__str__()}\n\t__ genre musical : {self.genre_musical}\n\t__ duree : {self.duree}'
+
+    def __str__(self):
+        return self.afficher_details()
+
+
+class Bibliotheque:
+
+    def __init__(self):
+        
+        self.documents=[]
+
+    def Ajouter_Document(self,document):
+
+        self.documents.append(document)
+        Console().print(f'\n[green]le Document {document.titre} ajoute a la bibliotheque [/green]')
+    
+    def Supprimer_Document(self,id_):
+
+        for item in self.documents : 
+            if item['id']==id_:
+                self.documents.remove()
+                Console().print(f'[green]Document avec ID {id_} supprime de la bibliotheque')
+                return
+        
+        Console().print(f"[red]Aucun document trouve avec l'ID {id_}[/red]")
+    
+    def Mettre_A_Jour_Document(self,id_,titre=None,auteur=None,annee_publication=None):
+
+        for item in self.documents:
+            if item.id==id_:
+
+                item.modifier_details(titre,auteur,annee_publication)
+                print(f"Document avec ID {id} mis à jour.")
+                return 
+            
+        print(f"Aucun document trouvé avec l'ID {id}.")            
+
+    def Afficher_Document(self):
+
+        if not self.documents: 
+            print('la bibliotheque est vide')
+        
+        else: 
+
+            for item in self.documents : 
+                print(item)
+                print("_"*40)
+    
+
+    def Filtrer_Document(self,criters,valeur):
+
+        resultats=[]
+
+        if criters=="annee":     
+            resultats=[doc for doc in self.documents if doc.annee_publication==valeur]
+        
+        if criters=="auteur": 
+            resultats=[doc for doc in self.documents if doc.auteur==valeur]
+
+        else : 
+            Console().print("[red]Critère de filtre non valide. Utilisez 'annee' ou 'auteur'.[/red]")
+        
+        if not resultats:
+            Console().print("[red]Critere de filtre non valide . Utilisez 'annee' ou 'auteur'[/red]")
+        
+        else : 
+            for item in resultats: 
+                print('resultats : \n',item)
+                
+try :   
+
     revue=Revue(
         id_=1,
         titre="Science",
@@ -86,7 +165,25 @@ try :
         nombre_pages=100
     )
 
-    print(livre)
+    print(livre,'\n\n')
+
+    cd = CD(
+        id_=3,
+        titre="Best of Jazz",
+        auteur="Various Artists",
+        annee_publication=2020,
+        genre_musical="Jazz",
+        duree=60.5)
+    
+    print(cd)
+
+
+    bibliotheque=Bibliotheque()
+
+    bibliotheque.Ajouter_Document(revue)
+    bibliotheque.Ajouter_Document(livre)
+
+    bibliotheque.Afficher_Document()
     
 
 except ValueError as e : 
