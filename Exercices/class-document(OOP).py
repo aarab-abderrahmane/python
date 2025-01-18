@@ -176,7 +176,43 @@ class Bibliotheque:
             json.dump(data,f,indent=4)
         
         Console().print(f"[yellow]Données sérialisées dans {fichier} (JSON).[/yellow]")
-                
+
+    def serialiser_scv(self,fichier):
+        data=[]
+
+        for item in self.documents:
+
+            item_dict={
+                "id":item.id,
+                "titre":item.titre,
+                "auteur":item.auteur,
+                "annee_publication":item.annee_publication
+            }
+
+            if isinstance(item,Livre):
+               item_dict['type']="Livre"
+               item_dict['isbn']=item.isbn
+               item_dict['nombre_pages']=item.nombre_pages
+            
+            elif isinstance(item,Revue):
+                item_dict['type']="Revue"
+                item_dict["numero"] = item.numero
+                item_dict["frequence"] = item.frequence
+            elif isinstance(item, CD):
+                item_dict["type"] = "CD"
+                item_dict["genre_musical"] = item.genre_musical
+                item_dict["duree"] = item.duree
+            
+            data.append(item_dict)
+
+        with open(fichier,"w",newline="") as f : 
+            writer =csv.DictWriter(f,fieldnames=data[0].keys())
+            writer.writeheader()
+            writer.writerows(data)
+
+        print(f"Données sérialisées dans {fichier} (CSV).")
+
+
 try :   
 
     revue=Revue(
@@ -220,7 +256,7 @@ try :
 
     bibliotheque.Afficher_Document()
 
-    bibliotheque.Serialiser_json("document.json")
+    bibliotheque.serialiser_scv("document.json")
     
 
 except ValueError as e : 
