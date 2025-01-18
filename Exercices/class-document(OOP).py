@@ -1,5 +1,7 @@
 from rich.console import Console 
 from abc import ABC , abstractmethod
+import json 
+import csv
 
 # class abstraite
 class Document(ABC):
@@ -118,7 +120,7 @@ class Bibliotheque:
         else: 
 
             for item in self.documents : 
-                print(item)
+                print('\n',item)
                 print("_"*40)
     
 
@@ -141,6 +143,39 @@ class Bibliotheque:
         else : 
             for item in resultats: 
                 print('resultats : \n',item)
+
+    def Serialiser_json(self,fichier):
+        data=[]
+
+        for item in self.documents:
+
+            item_dict={
+                "id":item.id,
+                "titre":item.titre,
+                "auteur":item.auteur,
+                "annee_publication":item.annee_publication
+            }
+
+            if isinstance(item,Livre):
+               item_dict['type']="Livre"
+               item_dict['isbn']=item.isbn
+               item_dict['nombre_pages']=item.nombre_pages
+            
+            elif isinstance(item,Revue):
+                item_dict['type']="Revue"
+                item_dict["numero"] = item.numero
+                item_dict["frequence"] = item.frequence
+            elif isinstance(item, CD):
+                item_dict["type"] = "CD"
+                item_dict["genre_musical"] = item.genre_musical
+                item_dict["duree"] = item.duree
+            
+            data.append(item_dict)
+        
+        with open(fichier,'w') as f :
+            json.dump(data,f,indent=4)
+        
+        Console().print(f"[yellow]Données sérialisées dans {fichier} (JSON).[/yellow]")
                 
 try :   
 
@@ -184,6 +219,8 @@ try :
     bibliotheque.Ajouter_Document(livre)
 
     bibliotheque.Afficher_Document()
+
+    bibliotheque.Serialiser_json("document.json")
     
 
 except ValueError as e : 
