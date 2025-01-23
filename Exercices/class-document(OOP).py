@@ -94,8 +94,8 @@ class Bibliotheque:
     def Supprimer_Document(self,id_):
 
         for item in self.documents : 
-            if item['id']==id_:
-                self.documents.remove()
+            if item.id==id_:
+                self.documents.remove(item)
                 Console().print(f'[green]Document avec ID {id_} supprime de la bibliotheque')
                 return
         

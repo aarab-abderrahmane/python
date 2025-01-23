@@ -27,7 +27,7 @@ class IPv4(NetworkComponenet):
         return "gestion des adresses IPv4"
     
     def isValidIPv4(self):
-        pattern=r"^((25[0-5]|2[0-4][0-9]|[0-1]?[0-9][0-9]?)\.){3}(25[0-5]|2[0-4][0-9]|[0-1]?[0-9[0-9]?)$"
+        pattern=r"^((25[0-5]|2[0-4][0-9]|[0-1]?[0-9][0-9]?)\.){3}(25[0-5]|2[0-4][0-9]|[0-1]?[0-9][0-9]?)$"
        
         """
         25[0-5]:
@@ -126,3 +126,22 @@ class IPv4(NetworkComponenet):
 
     ~ 10 =  ~11110110 = 00001001
     """
+    def getNbrofHots(self):
+        masque=self.getMasque()
+        if masque in ['Non applicable pour les classes D et E']:
+            return 0
+        bits_hote = sum(bin(255-int(octet)).count('1') for octet in masque.split('.'))
+        return (2 ** bits_hote) - 2 
+        
+        """
+        bin(255) ---> 11111111.count('1') --> 8  --> 8 bit
+
+        Usable Hosts:
+        Subnetting reserves 2 addresses:
+        1 for the network address.
+        1 for the broadcast address.            
+
+        2 ** n - (1+1)
+
+
+        """
