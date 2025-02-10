@@ -3,65 +3,56 @@ import subprocess
 import customtkinter as ctk
 from tkinter import filedialog, messagebox
 
-# إنشاء الواجهة
-ctk.set_appearance_mode("Dark")  # الوضع الداكن
+ctk.set_appearance_mode("Dark")  
 ctk.set_default_color_theme("blue")
 
 app = ctk.CTk()
 app.title("GitHub Push GUI")
 app.geometry("500x300")
+app.resizable(False,False)
 
-# متغير لتخزين مسار المجلد
-folder_path = ctk.StringVar()
 
-# دالة لاختيار المجلد
 def select_folder():
     folder = filedialog.askdirectory()
     if folder:
-        folder_path.set(folder)
+        folder_entry.delete(0,'end')
+        folder_entry.insert(0,str(folder))
 
-# دالة لتنفيذ push إلى GitHub
+
 def push_to_github():
-    repo_path = folder_path.get().strip()
+    repo_path = folder_entry.get().strip()
     commit_message = commit_entry.get().strip()
 
     if not repo_path:
-        messagebox.showerror("خطأ", "يرجى اختيار مجلد المشروع.")
+        messagebox.showerror("error", "Please select a project folder.")
         return
     
     if not commit_message:
-        messagebox.showerror("خطأ", "يرجى إدخال رسالة الكوميت.")
+        messagebox.showerror("error", "Please enter a commit message.")
         return
     
     try:
-        # تنفيذ أوامر Git
         subprocess.run(["git", "-C", repo_path, "add", "."], check=True)
         subprocess.run(["git", "-C", repo_path, "commit", "-m", commit_message], check=True)
         subprocess.run(["git", "-C", repo_path, "push"], check=True)
 
-        messagebox.showinfo("نجاح", "تم إرسال التغييرات إلى GitHub بنجاح!")
+        messagebox.showinfo("Success","Changes pushed to Github successfully")
     except subprocess.CalledProcessError:
-        messagebox.showerror("خطأ", "حدث خطأ أثناء تنفيذ أوامر Git. تأكد من إعداد الريبو بشكل صحيح.")
+        messagebox.showerror("error", "An error occurred while executing git commands.")
 
-# واجهة اختيار المجلد
-folder_frame = ctk.CTkFrame(app)
-folder_frame.pack(pady=10, padx=10, fill="x")
+home_frame = ctk.CTkFrame(app)
+home_frame.pack(side='left',fill="both",expand=True)
 
-folder_label = ctk.CTkLabel(folder_frame, text="المجلد:")
-folder_label.pack(side="left", padx=5)
+folder_entry = ctk.CTkEntry(home_frame, width=300 ,height=33,placeholder_text="folder path")
+folder_entry.pack(pady=50,fill="y")
 
-folder_entry = ctk.CTkEntry(folder_frame, textvariable=folder_path, width=300)
-folder_entry.pack(side="left", padx=5, fill="x", expand=True)
+folder_button = ctk.CTkButton(home_frame, text="📂", width=30,height=27, command=select_folder)
+folder_button.place(x=367,y=53)
 
-folder_button = ctk.CTkButton(folder_frame, text="📂", width=30, command=select_folder)
-folder_button.pack(side="right", padx=5)
+commit_entry = ctk.CTkEntry(home_frame,width=300,height=33,placeholder_text="your commit")
+commit_entry.pack(pady=0)
 
-# إدخال رسالة الكوميت
-commit_entry = ctk.CTkEntry(app, placeholder_text="أدخل رسالة الكوميت هنا", width=400)
-commit_entry.pack(pady=10)
-
-# زر الإرسال إلى GitHub
-push_button = ctk.CTkButton(app, text="Push to GitHub", command=push_to_github)
-push_button.pack(pady=10)
+push_button = ctk.CTkButton(home_frame, text="Push to GitHub", command=push_to_github,fg_color="green")
+push_button.pack(pady=50)
 
 app.mainloop()
