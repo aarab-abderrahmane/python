@@ -2,6 +2,9 @@ import os
 import subprocess
 import customtkinter as ctk
 from tkinter import filedialog, messagebox
+import sqlite3
+
+
 
 ctk.set_appearance_mode("Dark")  
 ctk.set_default_color_theme("blue")
@@ -12,11 +15,31 @@ app.geometry("500x300")
 app.resizable(False,False)
 
 
+
+def reload_data():
+
+    
+    cursor.execute('SELECT path FROM modifs')
+    mdf=cursor.fetchall()
+
+    if mdf :
+        folder_entry.delete(0,'end')
+        folder_entry.insert(0,mdf[0])
+
+    else : pass
+
+
+
 def select_folder():
     folder = filedialog.askdirectory()
     if folder:
         folder_entry.delete(0,'end')
         folder_entry.insert(0,str(folder))
+
+        cursor.execute("DELETE FROM modifs")
+
+        cursor.execute('INSERT INTO modifs (path) VALUES (?)',(folder,))
+        connect.commit()
 
 
 def push_to_github():
@@ -40,6 +63,18 @@ def push_to_github():
     except subprocess.CalledProcessError:
         messagebox.showerror("error", "An error occurred while executing git commands.")
 
+
+#data
+connect=sqlite3.connect('modifications.db')
+cursor=connect.cursor()
+
+cursor.execute('''CREATE TABLE IF NOT EXISTS modifs (
+                path text 
+               )''')
+
+connect.commit()
+
+
 home_frame = ctk.CTkFrame(app)
 home_frame.pack(side='left',fill="both",expand=True)
 
@@ -54,5 +89,8 @@ commit_entry.pack(pady=0)
 
 push_button = ctk.CTkButton(home_frame, text="Push to GitHub", command=push_to_github,fg_color="green")
 push_button.pack(pady=50)
+
+reload_data()
+
 
 app.mainloop()
