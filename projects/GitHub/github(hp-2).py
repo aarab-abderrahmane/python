@@ -112,14 +112,17 @@ connect.commit()
 home_frame = ctk.CTkFrame(app)
 home_frame.pack(side='left', fill="both", expand=True)
 
-folder_entry = ctk.CTkEntry(home_frame, width=300, height=33, placeholder_text="folder path")
-folder_entry.pack(pady=50, fill="y")
+logo= ctk.CTkLabel(home_frame,text="@aarab-abderrahmane",text_color="violet")
+logo.pack(side='top',anchor="w",padx=10)
 
-folder_button = ctk.CTkButton(home_frame, text="📂", width=30, height=27, command=select_folder)
-folder_button.place(x=367, y=53)
+folder_entry = ctk.CTkEntry(home_frame, width=300, height=33, placeholder_text="folder path")
+folder_entry.pack(padx=0,pady=50, fill="y")
+
+folder_button = ctk.CTkButton(home_frame, text="📂", width=33, height=33, command=select_folder,fg_color="red",font=('Arial',20),hover_color="green",border_width=1,corner_radius=7)
+folder_button.place(x=405, y=77)
 
 select_all_checkbox = ctk.CTkCheckBox(home_frame, text="Select All", variable=select_all_var, command=toggle_select_all)
-select_all_checkbox.place(y=100, x=200)
+select_all_checkbox.place(y=120, x=200)
 
 file_list_frame = ctk.CTkScrollableFrame(home_frame, width=350, height=150)
 file_list_frame.pack(pady=2)
@@ -127,8 +130,12 @@ file_list_frame.pack(pady=2)
 commit_entry = ctk.CTkEntry(home_frame, width=300, height=33, placeholder_text="your commit")
 commit_entry.pack(pady=20)
 
-push_button = ctk.CTkButton(home_frame, text="Push to GitHub", command=push_to_github, fg_color="green")
+push_button = ctk.CTkButton(home_frame, text="Push to GitHub", command=push_to_github, fg_color="green",corner_radius=0)
 push_button.pack(anchor="s", fill="x", side="bottom")
+
+
+
+
 
 reload_data()
 
