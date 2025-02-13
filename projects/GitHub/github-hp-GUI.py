@@ -4,7 +4,6 @@ import customtkinter as ctk
 from tkinter import filedialog, messagebox
 import sqlite3
 import webbrowser
-
 import os
 import sys
 
@@ -23,6 +22,15 @@ app.title("GitHub Push GUI")
 app.geometry("500x500")
 app.resizable(False, False)
 app.iconbitmap(resource_path("folder_scheduled_tasks_22598.ico"))
+
+
+
+# ____________________________
+
+
+
+
+
 
 file_checkboxes = {}
 select_all_var = ctk.BooleanVar()
@@ -117,6 +125,15 @@ def open_link(event):
     webbrowser.open("https://abderrahmane-aarab.carrd.co/")
 
 
+
+
+# _________________________________________________
+
+
+
+
+
+
 connect = sqlite3.connect('modifications.db')
 cursor = connect.cursor()
 
@@ -154,6 +171,67 @@ commit_entry.pack(pady=20)
 
 push_button = ctk.CTkButton(home_frame, text="Push to GitHub", command=push_to_github, fg_color="green",corner_radius=0)
 push_button.pack(anchor="s", fill="x", side="bottom")
+
+
+
+
+
+
+
+# ___________________________________________________
+
+def is_git_authenticated():
+    try:
+        user_email = subprocess.check_output(['git', 'config', '--global', 'user.email'], text=True).strip()
+        user_name = subprocess.check_output(['git', 'config', '--global', 'user.name'], text=True).strip()
+
+        if user_email and user_name:
+            return True
+        return False
+    except subprocess.CalledProcessError:
+        return False
+
+def prompt_for_git_credentials():
+    def save_credentials():
+        email = email_entry.get().strip()
+        username = username_entry.get().strip()
+        if not email or not username:
+            messagebox.showerror("Error", "Please enter both email and username.")
+            return
+
+        subprocess.run(['git', 'config', '--global', 'user.email', email])
+        subprocess.run(['git', 'config', '--global', 'user.name', username])
+
+        credentials_window.destroy()
+
+        messagebox.showinfo("Success", "Git credentials saved successfully!")
+
+    credentials_window = ctk.CTkToplevel(app)
+    credentials_window.title("Enter GitHub Credentials")
+    credentials_window.geometry("300x200")
+
+    email_label = ctk.CTkLabel(credentials_window, text="Email:")
+    email_label.pack(pady=5)
+    email_entry = ctk.CTkEntry(credentials_window, placeholder_text="Enter your email")
+    email_entry.pack(pady=5)
+
+    username_label = ctk.CTkLabel(credentials_window, text="Username:")
+    username_label.pack(pady=5)
+    username_entry = ctk.CTkEntry(credentials_window, placeholder_text="Enter your username")
+    username_entry.pack(pady=5)
+
+    save_button = ctk.CTkButton(credentials_window, text="Save", command=save_credentials)
+    save_button.pack(pady=10)
+
+def initialize_app():
+    if not is_git_authenticated():
+        prompt_for_git_credentials()
+    else:
+        reload_data()
+
+
+
+initialize_app()
 
 
 reload_data()
