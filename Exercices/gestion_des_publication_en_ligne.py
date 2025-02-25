@@ -42,6 +42,7 @@ class AdCampaign(ABC) :
 
 
 
+
 class InvalidBidgetError(Exception):
     def __int__(self,message = "le budget ne peut pas etre negatif ou nul."):
         super().__init__(message)
@@ -96,36 +97,40 @@ class Window:
         self.emty_row = Label(self.app,text="")
         self.emty_row.grid(row=0,column=0)
 
-
+        self.nom_var = StringVar()
         self.label_nom = Label(self.app , text="nom : ")
         self.label_nom.grid(row=1,column=1)
-        self.entry_nom = Entry(self.app,width=40)
+        self.entry_nom = Entry(self.app,width=40,textvariable=self.nom_var)
         self.entry_nom.grid(row=2,column=1)
 
+        self.budget_var = StringVar()
         self.label_budget = Label(self.app,text="budget : ")
         self.label_budget.grid(row=3,column=1,)
-        self.entry_budget= Entry(self.app , width=40)
+        self.entry_budget= Entry(self.app , width=40,textvariable=self.budget_var)
         self.entry_budget.grid(row=4,column=1)
 
+        self.publicite_var = StringVar()
         self.label_publicité = Label(self.app , text="Puclicité : ") 
         self.label_publicité.grid(row=5,column=1)
-        self.entry_publicité = Entry(self.app , width=40)
+        self.entry_publicité = Entry(self.app , width=40,textvariable=self.publicite_var)
         self.entry_publicité.grid(row=6,column=1)
 
 
         self.button_add = Button(self.app ,command=self.Ajouter, text="Ajouter",background="green" ,foreground="white")
-        self.button_add.grid(row=7 ,column=1,pady=10)
+        self.button_add.grid(row=7 ,column=1)
 
+        self.button_delete = Button(self.app, command=self.Delete_row,text="Delete",background="red",foreground="white")
+        self.button_delete.grid(row=8,column=1,pady=10)
 
         #treeview 
         column = ('Nom','Budget','Canal','Type')
         self.tree = ttk.Treeview(self.app,columns=column,show="headings")
-
+        self.tree.bind("<ButtonRelease-1>",lambda  event : self.Delete_row(event))
         for col in column : 
             self.tree.heading(col, text=col)
             self.tree.column(col, width=145,anchor="center")
 
-        self.tree.grid(row=8,column=1)
+        self.tree.grid(row=10,column=1)
 
     
     def Ajouter(self):
@@ -142,8 +147,10 @@ class Window:
             budget = float(budget)
             if budget <=0 :
                 raise InvalidBidgetError()
+                
         except ValueError : 
             messagebox.showerror('Error','le budget doit etre un nombre posifit.')
+            return
         
         if publicite.lower() =="google ads":
            campaign = GoogleAdsCampaign(nom,budget,"Digital",cpc=0.5)
@@ -161,6 +168,65 @@ class Window:
         self.entry_budget.delete(0,END)
         self.entry_publicité.delete(0, END)
 
+
+    def Delete_row(self,event=None):            
+        selection_item = self.tree.selection()
+        if not selection_item : 
+            return "None"
+
+        if event is not None :
+            answer = messagebox.askquestion('Action',"Do you want to delee this row or edit it ?")
+
+            if answer is None:
+                return
+            
+            elif answer=="yes":
+                pass
+
+            else : 
+
+                for sel in  selection_item:
+                    old_values = self.tree.item(sel,"values")
+                    nom,budget,canal,publicite = old_values
+                 
+                    self.entry_nom.insert(0,nom)
+                    self.entry_budget.insert(0,budget)
+                    self.entry_publicité.insert(0,publicite)
+
+                    self.button_add.grid_forget()
+
+                    self.save_button = Button(self.app,text="Save",background="blue",foreground="white",command= lambda : self.Update_row(sel,canal))
+                    self.save_button.grid(row=9,column=1,pady=10)
+
+                return 
+
+        for sel in selection_item : 
+            self.tree.delete(sel)
+    
+
+    def Cleaning(self):
+        self.entry_nom.delete(0,END)
+        self.entry_budget.delete(0,END)
+        self.entry_publicité.delete(0,END)
+
+    def Update_row(self,old_item,old_canal):
+        selection_row = self.tree.selection()
+        if not selection_row : 
+            return
+        
+        new_nom = self.entry_nom.get()
+        new_budget = self.entry_budget.get()
+        new_publicite = self.entry_publicité.get()
+
+        self.tree.item(old_item,values=(new_nom,new_budget,old_canal,new_publicite))
+
+        self.Cleaning()
+
+        self.save_button.grid_forget()
+        self.button_add.grid(row=9,column=1,pady=10)
+
+    
+        
 
 
 app=Tk()

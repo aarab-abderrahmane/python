@@ -26,14 +26,14 @@ class Account:
         self.frame_left.pack(side="left", fill="both")
         self.frame_right.pack(side="right",  fill="both")
 
-        self.label_1=Label(self.frame_left,text="your name",fg="white")
+        self.label_1=Label(self.frame_left,text="first name",fg="white",bg="black")
         self.label_1.place(x=10,y=10)
 
         self.entry_1=Entry(self.frame_left,width=100)
         self.entry_1.place(x=10,y=40)
 
 
-        self.label_2=Label(self.frame_left,text="your name",fg="white")
+        self.label_2=Label(self.frame_left,text="last name",fg="white",bg="black")
         self.label_2.place(x=10,y=60)
 
         self.entry_2=Entry(self.frame_left,width=100)
