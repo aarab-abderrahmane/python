@@ -1,4 +1,6 @@
 from abc import ABC ,abstractmethod
+from tkinter import *
+from tkinter import ttk,messagebox
 
 class Vehicule(ABC):
     def __init__(self,nom_client,matricule,capacite):
@@ -81,5 +83,86 @@ except CapaciteError as e :
 try:
     v_2 = Vehicule("Test Client", "999-XYZ", 1000)  
     print(v_2.calculer_efficiency())  
-except NotImplementedError as e:
+except TypeError as e:
     print(f"Erreur détectée : {e}")
+
+class Winodw : 
+    def __init__(self,app):
+        self.app = app 
+        self.app.title('gestion de flotte automobile')
+        self.app.geometry('600x400')
+
+        self.app.bind("<Return>",self.update_table)
+
+        #GUI
+
+        self.label_nom = Label(self.app, text="Nom")
+        self.entry_nom = Entry(self.app , width = 40)
+        self.label_nom.pack(pady=10)
+        self.entry_nom.pack(pady=0)
+
+        self.label_matricule = Label(self.app , text="Matricule")
+        self.entry_matricule = Entry(self.app,width=40)
+        self.label_matricule.pack(pady=10)
+        self.entry_matricule.pack(pady=0)
+
+        self.label_capacite = Label(self.app,text="Capacite")
+        self.entry_capacite = Entry(self.app , width=40)
+        self.label_capacite.pack(pady=10)
+        self.entry_capacite.pack(pady=0)
+
+        self.select_type = ttk.Combobox(self.app , values = ('Voiture','Camion'))
+        self.select_type.set("Options")
+        self.select_type.pack(pady=10)
+
+        # print(self.select_type.get() if self.select_type.get() is not None else "None")
+
+        self.button_add = Button(self.app , text="Ajouter",command=self.update_table)
+        self.button_add.pack(pady=10)
+
+        self.tree_view = ttk.Treeview(self.app , columns=('nom',"matricule",'capacite','type'),show="headings")
+        self.tree_view.heading("nom",text="nom client")
+        self.tree_view.heading('matricule',text="matricule")
+        self.tree_view.heading('capacite',text='capacite')
+        self.tree_view.heading('type',text="type")
+
+        for col in ('nom',"matricule",'capacite','type'):
+            self.tree_view.column(col,width=50)
+       
+        self.tree_view.pack(fill='both',side="bottom")
+
+
+
+
+    def update_table(self,evnet=None):
+        try : 
+
+            type_véhicule = self.select_type.get()
+            nom = self.entry_nom.get()
+            matricule = self.entry_matricule.get()
+            capacite = self.entry_capacite.get()
+            if not capacite.isdigit()  or float(capacite) <0:
+                messagebox.showerror('Error','You must enter a positive number in the field <Capacite>.')
+                return
+        
+            if type_véhicule =="Options" : 
+                messagebox.showwarning('Warning','You must to choose theh option to continue.') 
+                return
+
+            elif type_véhicule =="Voiture":
+                vehivule = Voiture(nom,matricule,capacite,25)
+
+            else:
+                vehivule = Camion(nom,matricule,capacite,100,40)
+    
+            self.tree_view.insert("","end",values=(nom,matricule,capacite,type_véhicule))
+    
+        except TypeError as e : 
+            return e
+        
+
+
+
+app = Tk()
+Winodw(app)
+app.mainloop()
