@@ -159,10 +159,15 @@ class Winodw :
             else:
                 vehivule = Camion(nom,matricule,capacite,100,40)
     
-            self.tree_view.insert("","end",values=(nom,matricule,float(capacite),type_véhicule,vehivule.Calculer_efficiency()))
+            self.tree_view.insert("","end",values=(nom,matricule,float(capacite),type_véhicule,vehivule.Calculer_efficiency))
     
+            for entry in (self.entry_capacite,self.entry_matricule,self.entry_nom):
+                if entry.get():
+                 entry.delete(0,END)
+
         except TypeError as e : 
             return e
+        
     
     def Delete_row(self,event=None) :
         selection_item = self.tree_view.selection()
