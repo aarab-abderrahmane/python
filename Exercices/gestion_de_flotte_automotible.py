@@ -86,6 +86,8 @@ try:
 except TypeError as e:
     print(f"Erreur détectée : {e}")
 
+
+
 class Winodw : 
     def __init__(self,app):
         self.app = app 
@@ -120,17 +122,19 @@ class Winodw :
         self.button_add = Button(self.app , text="Ajouter",command=self.update_table)
         self.button_add.pack(pady=10)
 
-        self.tree_view = ttk.Treeview(self.app , columns=('nom',"matricule",'capacite','type'),show="headings")
+        self.tree_view = ttk.Treeview(self.app , columns=('nom',"matricule",'capacite','type','efficacite_estimee'),show="headings")
         self.tree_view.heading("nom",text="nom client")
         self.tree_view.heading('matricule',text="matricule")
         self.tree_view.heading('capacite',text='capacite')
         self.tree_view.heading('type',text="type")
+        self.tree_view.heading('efficacite_estimee',text="efficacité estimée")
 
         for col in ('nom',"matricule",'capacite','type'):
             self.tree_view.column(col,width=50)
+
        
         self.tree_view.pack(fill='both',side="bottom")
-
+        self.tree_view.bind('<ButtonRelease-1>',self.Delete_row)
 
 
 
@@ -155,10 +159,17 @@ class Winodw :
             else:
                 vehivule = Camion(nom,matricule,capacite,100,40)
     
-            self.tree_view.insert("","end",values=(nom,matricule,capacite,type_véhicule))
+            self.tree_view.insert("","end",values=(nom,matricule,float(capacite),type_véhicule,vehivule.Calculer_efficiency()))
     
         except TypeError as e : 
             return e
+    
+    def Delete_row(self,event=None) :
+        selection_item = self.tree_view.selection()
+        if not selection_item : return
+        for item in selection_item : 
+            self.tree_view.delete(item)
+
         
 
 
